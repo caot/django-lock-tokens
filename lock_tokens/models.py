@@ -2,6 +2,7 @@ import datetime
 from uuid import uuid4
 import warnings
 
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError, models, transaction
@@ -34,6 +35,7 @@ class LockToken(models.Model):
     locked_object_id = models.PositiveIntegerField()
     locked_object = GenericForeignKey("locked_object_content_type", "locked_object_id")
     locked_at = models.DateTimeField(editable=False, default=timezone.now)
+    locked_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     objects = LockTokenManager()
 
